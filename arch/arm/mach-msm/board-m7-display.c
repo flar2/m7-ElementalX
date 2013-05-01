@@ -1552,8 +1552,10 @@ void pwmic_config(unsigned char* index, unsigned char* value, int count)
 	}
 }
 
-unsigned char idx[1] = {0x50};
-unsigned char val[1] = {0x01};
+unsigned char idx[5] = {0x50, 0x01, 0x02, 0x05, 0x00};
+unsigned char val[5] = {0x02, 0x09, 0x78, 0x14, 0x04};
+unsigned char idx0[1] = {0x03};
+unsigned char val0[1] = {0xFF};
 unsigned char idx1[5] = {0x00, 0x01, 0x02, 0x03, 0x05};
 unsigned char val1[5] = {0x04, 0x09, 0x78, 0xff, 0x14};
 unsigned char val2[5] = {0x14, 0x08, 0x78, 0xff, 0x14};
@@ -1588,8 +1590,9 @@ static void m7_set_backlight(struct msm_fb_data_type *mfd)
 			gpio_tlmm_config(GPIO_CFG(BL_HW_EN, 0, GPIO_CFG_OUTPUT, GPIO_CFG_NO_PULL, GPIO_CFG_2MA), GPIO_CFG_ENABLE);
 			gpio_set_value(BL_HW_EN, 1);
 			msleep(1);
-			pwmic_config(idx, val, sizeof(idx)); 
-			pwmic_config(idx1, val1, sizeof(idx1));
+			pwmic_config(idx, val, sizeof(idx));
+			msleep(1);
+			pwmic_config(idx0, val0, sizeof(idx0));
 		}
 	} else {
 		if (resume_blk) {
@@ -1961,10 +1964,14 @@ void m7_set_cabc (struct msm_fb_data_type *mfd, int mode)
 		PR_DISP_INFO("set_cabc mode = %d\n", mode);
        } else if (panel_type == PANEL_ID_M7_JDI_SAMSUNG_C2_1 ||
 			panel_type == PANEL_ID_M7_JDI_SAMSUNG_C2_2) {
-               if (mode == 2 || mode == 3) {
+               if (mode == 2) {
                        samsung_MIE_ctrl1[1] = 0x40;
                        BCSAVE[2] = 0xB3;
                        TMF[1] = 0x33;
+               } else if (mode == 3) {
+                       samsung_MIE_ctrl1[1] = 0x80;
+                       BCSAVE[2] = 0x99;
+                       TMF[1] = 0x2C;
                } else
                        return;
 
