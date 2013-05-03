@@ -81,7 +81,7 @@ static void check_temp(struct work_struct *work)
 	if (max_freq == limited_max_freq)
 		goto reschedule;
 
-	
+
 	for_each_possible_cpu(cpu) {
 		ret = update_cpu_max_freq(cpu, max_freq);
 		if (ret)

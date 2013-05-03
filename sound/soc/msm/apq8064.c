@@ -1687,7 +1687,7 @@ static int msm_aux_pcm_get_gpios(void)
 {
 	int ret = 0;
 
-	pr_info("%s ++\n ", __func__);
+	pr_info("%s++\n ", __func__);
 
 	ret = gpio_request(GPIO_AUX_PCM_DOUT, "AUX PCM DOUT");
 	if (ret < 0) {
