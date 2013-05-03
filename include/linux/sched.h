@@ -737,6 +737,7 @@ struct sched_domain {
 	unsigned int smt_gain;
 	int flags;			
 	int level;
+	int idle_buddy;      /* cpu assigned to select_idle_sibling() */ 
 
 	
 	unsigned long last_balance;	
