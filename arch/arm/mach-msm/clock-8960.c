@@ -556,7 +556,7 @@ static struct pll_clk pll15_clk = {
 	.parent = &pxo_clk.c,
 	.c = {
 		.dbg_name = "pll15_clk",
-		.rate = 975000000,
+		.rate = 900000000,
 		.ops = &clk_ops_local_pll,
 		CLK_INIT(pll15_clk.c),
 		.warned = true,
@@ -3440,7 +3440,7 @@ static unsigned long fmax_gfx3d_8064ab[MAX_VDD_LEVELS] __initdata = {
 static unsigned long fmax_gfx3d_8064[MAX_VDD_LEVELS] __initdata = {
 	[VDD_DIG_LOW]     = 128000000,
 	[VDD_DIG_NOMINAL] = 325000000,
-	[VDD_DIG_HIGH]    = 400000000
+	[VDD_DIG_HIGH]    = 450000000
 };
 
 static unsigned long fmax_gfx3d_8930[MAX_VDD_LEVELS] __initdata = {
@@ -3488,7 +3488,7 @@ static struct rcg_clk gfx3d_clk = {
 		.dbg_name = "gfx3d_clk",
 		.ops = &clk_ops_rcg,
 		VDD_DIG_FMAX_MAP3(LOW,  128000000, NOMINAL, 300000000,
-				  HIGH, 400000000),
+				  HIGH, 450000000),
 		CLK_INIT(gfx3d_clk.c),
 		.depends = &gmem_axi_clk.c,
 	},
