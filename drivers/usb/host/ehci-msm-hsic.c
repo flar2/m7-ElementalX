@@ -2261,7 +2261,7 @@ static int msm_hsic_pm_resume(struct device *dev)
 	 * start I/O.
 	 */
 	if (!atomic_read(&mehci->pm_usage_cnt) &&
-			pm_runtime_suspended(dev))
+                       pm_runtime_suspended(dev))
 		return 0;
 
 	ret = msm_hsic_resume(mehci);
