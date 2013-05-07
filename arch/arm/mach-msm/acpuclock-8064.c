@@ -22,8 +22,6 @@
 #include "acpuclock.h"
 #include "acpuclock-krait.h"
 
-int opt_bin = 2;
-
 static struct hfpll_data hfpll_data __initdata = {
 	.mode_offset = 0x00,
 	.l_offset = 0x08,
@@ -50,8 +48,8 @@ static struct scalable scalable[] __initdata = {
 		.sec_clk_sel = 2,
 		.l2cpmr_iaddr = 0x4501,
 		.vreg[VREG_CORE] = { "krait0", 1350000 },
-		.vreg[VREG_MEM]  = { "krait0_mem", 1250000 },
-		.vreg[VREG_DIG]  = { "krait0_dig", 1250000 },
+		.vreg[VREG_MEM]  = { "krait0_mem", 1150000 },
+		.vreg[VREG_DIG]  = { "krait0_dig", 1150000 },
 		.vreg[VREG_HFPLL_A] = { "krait0_hfpll", 1800000 },
 	},
 	[CPU1] = {
@@ -61,8 +59,8 @@ static struct scalable scalable[] __initdata = {
 		.sec_clk_sel = 2,
 		.l2cpmr_iaddr = 0x5501,
 		.vreg[VREG_CORE] = { "krait1", 1350000 },
-		.vreg[VREG_MEM]  = { "krait1_mem", 1250000 },
-		.vreg[VREG_DIG]  = { "krait1_dig", 1250000 },
+		.vreg[VREG_MEM]  = { "krait1_mem", 1150000 },
+		.vreg[VREG_DIG]  = { "krait1_dig", 1150000 },
 		.vreg[VREG_HFPLL_A] = { "krait1_hfpll", 1800000 },
 	},
 	[CPU2] = {
@@ -72,8 +70,8 @@ static struct scalable scalable[] __initdata = {
 		.sec_clk_sel = 2,
 		.l2cpmr_iaddr = 0x6501,
 		.vreg[VREG_CORE] = { "krait2", 1350000 },
-		.vreg[VREG_MEM]  = { "krait2_mem", 1250000 },
-		.vreg[VREG_DIG]  = { "krait2_dig", 1250000 },
+		.vreg[VREG_MEM]  = { "krait2_mem", 1150000 },
+		.vreg[VREG_DIG]  = { "krait2_dig", 1150000 },
 		.vreg[VREG_HFPLL_A] = { "krait2_hfpll", 1800000 },
 	},
 	[CPU3] = {
@@ -83,8 +81,8 @@ static struct scalable scalable[] __initdata = {
 		.sec_clk_sel = 2,
 		.l2cpmr_iaddr = 0x7501,
 		.vreg[VREG_CORE] = { "krait3", 1350000 },
-		.vreg[VREG_MEM]  = { "krait3_mem", 1250000 },
-		.vreg[VREG_DIG]  = { "krait3_dig", 1250000 },
+		.vreg[VREG_MEM]  = { "krait3_mem", 1150000 },
+		.vreg[VREG_DIG]  = { "krait3_dig", 1150000 },
 		.vreg[VREG_HFPLL_A] = { "krait3_hfpll", 1800000 },
 	},
 	[L2] = {
@@ -104,8 +102,6 @@ static struct msm_bus_paths bw_level_tbl[] __initdata = {
 	[3] = BW_MBPS(2128), 
 	[4] = BW_MBPS(3200), 
 	[5] = BW_MBPS(4264), 
-	[6] = BW_MBPS(4532), 
-	[7] = BW_MBPS(4624), 
 };
 
 static struct msm_bus_scale_pdata bus_scale_data __initdata = {
@@ -131,47 +127,7 @@ static struct l2_level l2_freq_tbl[] __initdata = {
 	[12] = { { 1026000, HFPLL, 1, 0x26 }, 1150000, 1150000, 5 },
 	[13] = { { 1080000, HFPLL, 1, 0x28 }, 1150000, 1150000, 5 },
 	[14] = { { 1134000, HFPLL, 1, 0x2A }, 1150000, 1150000, 5 },
-	[15] = { { 1188000, HFPLL, 1, 0x2C }, 1150000, 1150000, 6 },
-	{ }
-};
-
-static struct l2_level l2_freq_tbl_elementalx[] __initdata = {
-	[0]  = { {  384000, PLL_8, 0, 0x00 },  950000, 1050000, 1 },
-	[1]  = { {  432000, HFPLL, 2, 0x20 }, 1050000, 1050000, 2 },
-	[2]  = { {  486000, HFPLL, 2, 0x24 }, 1050000, 1050000, 2 },
-	[3]  = { {  540000, HFPLL, 2, 0x28 }, 1050000, 1050000, 2 },
-	[4]  = { {  594000, HFPLL, 1, 0x16 }, 1050000, 1050000, 2 },
-	[5]  = { {  648000, HFPLL, 1, 0x18 }, 1050000, 1050000, 4 },
-	[6]  = { {  702000, HFPLL, 1, 0x1A }, 1150000, 1150000, 4 },
-	[7]  = { {  756000, HFPLL, 1, 0x1C }, 1150000, 1150000, 4 },
-	[8]  = { {  810000, HFPLL, 1, 0x1E }, 1150000, 1150000, 4 },
-	[9]  = { {  864000, HFPLL, 1, 0x20 }, 1150000, 1150000, 4 },
-	[10] = { {  918000, HFPLL, 1, 0x22 }, 1150000, 1150000, 5 },
-	[11] = { {  972000, HFPLL, 1, 0x24 }, 1150000, 1150000, 5 },
-	[12] = { { 1026000, HFPLL, 1, 0x26 }, 1150000, 1150000, 5 },
-	[13] = { { 1080000, HFPLL, 1, 0x28 }, 1150000, 1150000, 5 },
-	[14] = { { 1188000, HFPLL, 1, 0x2C }, 1150000, 1150000, 6 },
-	[15] = { { 1242000, HFPLL, 1, 0x2E }, 1175000, 1175000, 6 },
-	{ }
-};
-
-static struct l2_level l2_freq_tbl_ultra[] __initdata = {
-	[0]  = { {  384000, PLL_8, 0, 0x00 },  950000, 1050000, 1 },
-	[1]  = { {  432000, HFPLL, 2, 0x20 }, 1050000, 1050000, 2 },
-	[2]  = { {  486000, HFPLL, 2, 0x24 }, 1050000, 1050000, 2 },
-	[3]  = { {  540000, HFPLL, 2, 0x28 }, 1050000, 1050000, 2 },
-	[4]  = { {  594000, HFPLL, 1, 0x16 }, 1050000, 1050000, 2 },
-	[5]  = { {  648000, HFPLL, 1, 0x18 }, 1050000, 1050000, 4 },
-	[6]  = { {  702000, HFPLL, 1, 0x1A }, 1150000, 1150000, 4 },
-	[7]  = { {  756000, HFPLL, 1, 0x1C }, 1150000, 1150000, 4 },
-	[8]  = { {  810000, HFPLL, 1, 0x1E }, 1150000, 1150000, 4 },
-	[9]  = { {  864000, HFPLL, 1, 0x20 }, 1150000, 1150000, 4 },
-	[10] = { {  918000, HFPLL, 1, 0x22 }, 1150000, 1150000, 5 },
-	[11] = { {  972000, HFPLL, 1, 0x24 }, 1150000, 1150000, 5 },
-	[12] = { { 1026000, HFPLL, 1, 0x26 }, 1150000, 1150000, 5 },
-	[13] = { { 1080000, HFPLL, 1, 0x28 }, 1150000, 1150000, 5 },
-	[14] = { { 1242000, HFPLL, 1, 0x2E }, 1175000, 1175000, 6 },
-	[15] = { { 1296000, HFPLL, 1, 0x30 }, 1175000, 1175000, 6 },
+	[15] = { { 1188000, HFPLL, 1, 0x2C }, 1150000, 1150000, 5 },
 	{ }
 };
 
@@ -615,37 +571,12 @@ static struct acpuclk_krait_params acpuclk_8064_params __initdata = {
 	.stby_khz = 384000,
 };
 
-static int __init get_opt_level(char *l2_opt)
-{
-	if (strcmp(l2_opt, "0") == 0) {
-		opt_bin = 0;
-	} else if (strcmp(l2_opt, "1") == 0) {
-		opt_bin = 1;
-	} else if (strcmp(l2_opt, "2") == 0) {
-		opt_bin = 2;
-	} else {
-		opt_bin = 0;
-	}
-	return 0;
-}
-
-__setup("l2_opt=", get_opt_level); 
-
 static int __init acpuclk_8064_probe(struct platform_device *pdev)
 {
 	if (cpu_is_apq8064ab() ||
 		SOCINFO_VERSION_MAJOR(socinfo_get_version()) == 2) {
 		acpuclk_8064_params.hfpll_data->low_vdd_l_max = 37;
 		acpuclk_8064_params.hfpll_data->nom_vdd_l_max = 74;
-	}
-
-	if (opt_bin == 1) {
-       		acpuclk_8064_params.l2_freq_tbl = l2_freq_tbl_elementalx;
-        	acpuclk_8064_params.l2_freq_tbl_size = sizeof(l2_freq_tbl_elementalx);
-	}
-	if (opt_bin == 2) {
-       		acpuclk_8064_params.l2_freq_tbl = l2_freq_tbl_ultra;
-        	acpuclk_8064_params.l2_freq_tbl_size = sizeof(l2_freq_tbl_ultra);
 	}
 
 	return acpuclk_krait_init(&pdev->dev, &acpuclk_8064_params);
