@@ -71,13 +71,24 @@ static int override_cpu;
 static int set_cpu_freq(struct cpufreq_policy *policy, unsigned int new_freq)
 {
 	int ret = 0;
+#ifdef CONFIG_PERFLOCK
+	int perf_freq = 0;
+#endif
 	struct cpufreq_freqs freqs;
 	struct cpu_freq *limit = &per_cpu(cpu_freq_info, policy->cpu);
 
 	freqs.old = policy->cur;
-
+#ifdef CONFIG_PERFLOCK
+	perf_freq = perflock_override(policy, new_freq);
+	if (perf_freq) {
+		if (policy->cur == perf_freq)
+			return 0;
+		else
+			freqs.new = perf_freq;
+	} else if (override_cpu) {
+#else
 	if (override_cpu) {
-
+#endif
 		if (policy->cur == policy->max)
 			return 0;
 		else
@@ -319,7 +330,7 @@ static int __cpuinit msm_cpufreq_init(struct cpufreq_policy *policy)
 		cur_freq = table[index].frequency;
 	}
 
-	policy->cur = cur_freq;
+	policy->cur = 1728000;
 
 	policy->cpuinfo.transition_latency =
 		acpuclk_get_switch_time() * NSEC_PER_USEC;
