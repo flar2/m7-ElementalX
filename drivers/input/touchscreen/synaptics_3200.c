@@ -144,11 +144,21 @@ static irqreturn_t synaptics_irq_thread(int irq, void *ptr);
 
 extern unsigned int get_tamper_sf(void);
 
+
+bool scr_suspended = false;
+
+extern uint8_t touchscreen_is_on(void)
+{
+	if (scr_suspended == false) {
+		return 1;
+	}
+	return 0;
+} 
+
 #ifdef CONFIG_TOUCHSCREEN_SYNAPTICS_SWEEP2WAKE
 int s2w_switch = 1;
 int l2m_switch = 1;
 int s2w_wakestat = 0;
-bool scr_suspended = false;
 int s2w_hist[2] = {0, 0};
 cputime64_t s2w_time[2] = {0, 0};
 int l2m_hist[2] = {0, 0};
