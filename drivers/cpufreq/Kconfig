@@ -67,6 +67,13 @@ config CPU_FREQ_DEFAULT_GOV_POWERSAVE
 	  the frequency statically to the lowest frequency supported by
 	  the CPU.
 
+config CPU_FREQ_DEFAULT_GOV_WHEATLEY
+	bool "wheatley"
+	select CPU_FREQ_GOV_WHEATLEY
+	select CPU_FREQ_GOV_PERFORMANCE
+	help
+	  Use the CPUFreq governor 'wheatley' as default.
+
 config CPU_FREQ_DEFAULT_GOV_USERSPACE
 	bool "userspace"
 	select CPU_FREQ_GOV_USERSPACE
@@ -116,12 +123,6 @@ config CPU_FREQ_DEFAULT_GOV_INTELLIDEMAND
 	help
 	  Use the CPUFreq governor 'intellidemand' as default.
 	  
-config CPU_FREQ_DEFAULT_GOV_SMARTASSV2
-	bool "smartass2"
-	select CPU_FREQ_GOV_SMARTASSV2
-	help
-		Use the CPUFreq governor 'smartassV2' as default.
-
 config CPU_FREQ_DEFAULT_GOV_BADASS
 	bool "badass"
 	select CPU_FREQ_GOV_BADASS
@@ -135,12 +136,6 @@ config CPU_FREQ_DEFAULT_GOV_LIONHEART
 	help
 	 Use the CPUFreq governor 'lionheart' as default.
 	 
-config CPU_FREQ_DEFAULT_GOV_INTERACTIVEX2
-  	bool "interactiveX"
-  	select CPU_FREQ_GOV_INTERACTIVEX2
-  	help
-    	  Use the CPUFreq governor 'interactiveX2' as default.
-
 config CPU_FREQ_DEFAULT_GOV_LAGFREE
         bool "lagfree"
         select CPU_FREQ_GOV_LAGFREE
@@ -152,6 +147,11 @@ config CPU_FREQ_DEFAULT_GOV_LAGFREE
           governor. If unsure have a look at the help section of the
           driver. Fallback governor will be the performance governor.
 
+config CPU_FREQ_DEFAULT_GOV_SMARTMAX
+	bool "smartmax"
+	select CPU_FREQ_GOV_SMARTMAX
+	help
+	  Use the CPUFreq governor 'smartmax' as default
 
 
 endchoice
@@ -163,170 +163,11 @@ config CPU_FREQ_GOV_LIONHEART
 	 Use the CPUFreq governor 'lionheart' as default.
 
 	  If in doubt, say N.
-	  
-config CPU_FREQ_GOV_SMARTASSV2
-	tristate "'smartassV2' cpufreq governor"
-	depends on CPU_FREQ
-	help
-		'smartassV2' - a "smart" governor
-		If in doubt, say N.
-
-config SMARTASSV2_SLEEP_IDEAL_FREQ
-	int "The ideal frequency to use when awake."
-	default 768000
-	depends on CPU_FREQ_GOV_SMARTASSV2
-	help
-	  The "ideal" frequency to use when awake. The governor will ramp up faster
-	  towards the ideal frequency and slower after it has passed it. Similarly,
-	  lowering the frequency towards the ideal frequency is faster than below it.
-
-config SMARTASSV2_AWAKE_IDEAL_FREQ
-	int "The ideal frequency to use when suspended."
-	default 192000
-	depends on CPU_FREQ_GOV_SMARTASSV2
-	help
-	  The "ideal" frequency to use when suspended.
-	  When set to 0, the governor will not track the suspended state (meaning
-	  that practically when sleep_ideal_freq==0 the awake_ideal_freq is used
-	  also when suspended).
-
-config SMARTASSV2_RAMP_UP_STEP
-	int "Freqeuncy delta when ramping up above the ideal freqeuncy."
-	default 256000
-	depends on CPU_FREQ_GOV_SMARTASSV2
-	help
-	  Freqeuncy delta when ramping up above the ideal freqeuncy.
-	  Zero disables and causes to always jump straight to max frequency.
-	  When below the ideal freqeuncy we always ramp up to the ideal freq.
-
-config SMARTASSV2_RAMP_DOWN_STEP
-	int "Freqeuncy delta when ramping down below the ideal freqeuncy."
-	default 256000
-	depends on CPU_FREQ_GOV_SMARTASSV2
-	help
-	  Freqeuncy delta when ramping down below the ideal freqeuncy.
-	  Zero disables and will calculate ramp down according to load heuristic.
-	  When above the ideal freqeuncy we always ramp down to the ideal freq.
-
-config SMARTASSV2_MAX_CPU_LOAD
-	int "CPU freq will be increased if measured load > max_cpu_load."
-	default 50
-	depends on CPU_FREQ_GOV_SMARTASSV2
-	help
-	  CPU freq will be increased if measured load > max_cpu_load.
-
-config SMARTASSV2_MIN_CPU_LOAD
-	int "CPU freq will be decreased if measured load < max_cpu_load."
-	default 25
-	depends on CPU_FREQ_GOV_SMARTASSV2
-	help
-	  CPU freq will be decreased if measured load < max_cpu_load.
-
-config SMARTASSV2_UP_RATE_US
-	int "The minimum amount of time to spend at a frequency before we can ramp up."
-	default 48000
-	depends on CPU_FREQ_GOV_SMARTASSV2
-	help
-	  The minimum amount of time to spend at a frequency before we can ramp up.
-	  Notice we ignore this when we are below the ideal frequency.
-
-config SMARTASSV2_DOWN_RATE_US
-	int "The minimum amount of time to spend at a frequency before we can ramp down."
-	default 99000
-	depends on CPU_FREQ_GOV_SMARTASSV2
-	help
-	  The minimum amount of time to spend at a frequency before we can ramp down.
-	  Notice we ignore this when we are below the ideal frequency.
-
-config SMARTASSV2_SLEEP_WAKEUP_FREQ
-	int "The frequency to set when waking up from sleep."
-	default 99999999
-	depends on CPU_FREQ_GOV_SMARTASSV2
-	help
-	  The frequency to set when waking up from sleep.
-	  When sleep_ideal_freq=0 this will have no effect.
-
-config SMARTASSV2_SAMPLE_RATE_JIFFIES
-	int "Sampling rate."
-	default 2
-	depends on CPU_FREQ_GOV_SMARTASSV2
-	help
-	  Sampling rate, I highly recommend to leave it at 2.
-	  
-config CPU_FREQ_GOV_BADASS
-	tristate "'badass' cpufreq governor"
-	depends on CPU_FREQ
-	help
-	  'badass' - This driver adds a dynamic cpufreq policy governor.
-	  The governor does a periodic polling and
-	  changes frequency based on the CPU utilization.
-	  The support for this governor depends on CPU capability to
-	  do fast frequency switching (i.e, very low latency frequency
-	  transitions).
-
-	  If in doubt, say N.
-
-config CPU_FREQ_GOV_BADASS_2_PHASE
-	tristate "'2-phase' power-efficiency badass algorithm"
-	depends on CPU_FREQ_GOV_BADASS
-	help
-	 '2-phase' - This driver adds a new algo to save power
-
 	 
 config CPU_FREQ_GOV_INTELLIDEMAND
     tristate "'intellidemand' cpufreq governor"
     depends on CPU_FREQ
-
 	 
-
-config CPU_FREQ_GOV_BADASS_2_PHASE_FREQ
-	int "'2-phase' badass frequency"
-	default 918000
-	depends on CPU_FREQ_GOV_BADASS
-	depends on CPU_FREQ_GOV_BADASS_2_PHASE
-
-config CPU_FREQ_GOV_BADASS_3_PHASE
-	tristate "'3-phase' power-efficiency badass algorithm"
-	depends on CPU_FREQ_GOV_BADASS
-	depends on CPU_FREQ_GOV_BADASS_2_PHASE
-	help
-	  '3-phase' - This driver adds a new algo to save power
-
-config CPU_FREQ_GOV_BADASS_3_PHASE_FREQ
-	int "'3-phase' badass frequency"
-	default 1188000
-	depends on CPU_FREQ_GOV_BADASS
-	depends on CPU_FREQ_GOV_BADASS_2_PHASE
-	depends on CPU_FREQ_GOV_BADASS_3_PHASE
-
-config CPU_FREQ_GOV_BADASS_GPU_CONTROL
-	tristate "'gpu_control' power-efficiency badass algorithm"
-	depends on CPU_FREQ_GOV_BADASS
-	depends on CPU_FREQ_GOV_BADASS_2_PHASE
-	help
-	  'gpu_control' - This driver adds a new algo to save power
-
-config CPU_FREQ_GOV_BADASS_LOWBAT_POWERSAVE
-	tristate "'lowbat_powersave' power-efficiency badass algorithm"
-	depends on CPU_FREQ_GOV_BADASS
-	help
-	  'lowbat_powersave' - This driver adds a new algo to save power
-
-config CPU_FREQ_GOV_BADASS_ALLOW_BYPASS
-	tristate "Allows bypassing phases"
-	depends on CPU_FREQ_GOV_BADASS
-	depends on CPU_FREQ_GOV_BADASS_2_PHASE
-	help
-	  'allow_bypass' - This driver adds a bypass to the phases
-	  
-config CPU_FREQ_GOV_INTERACTIVEX2
-	tristate "'interactiveX2' cpufreq governor"
-	depends on CPU_FREQ
-	help
-	   'interactiveX2' - interactive governor with early suspend support added.
-	    This governor uses hotplug to shutdown and start up cpu1 when suspended.
-	    If in doubt, say N
-
 config CPU_FREQ_GOV_LAGFREE
         tristate "'lagfree' cpufreq governor"
         depends on CPU_FREQ
@@ -414,6 +255,10 @@ config CPU_FREQ_GOV_POWERSAVE
 
 	  If in doubt, say Y.
 
+config CPU_FREQ_GOV_WHEATLEY
+	tristate "'wheatley' cpufreq governor"
+	depends on CPU_FREQ
+
 config CPU_FREQ_GOV_USERSPACE
 	tristate "'userspace' governor for userspace frequency scaling"
 	help
@@ -463,6 +308,12 @@ config CPU_FREQ_GOV_INTERACTIVE
 	  For details, take a look at linux/Documentation/cpu-freq.
 
 	  If in doubt, say N.
+
+config CPU_FREQ_GOV_SMARTMAX
+	tristate "'smartmax' cpufreq policy governor"
+	select CPU_FREQ_TABLE
+	help
+	  'smartmax' combined ondemand and smartass2
 
 config CPU_FREQ_GOV_CONSERVATIVE
 	tristate "'conservative' cpufreq governor"
