@@ -146,7 +146,7 @@ enum binder_stat_types {
 };
 
 struct binder_stats {
-	int br[_IOC_NR(BR_FAILED_ALLOC) + 1];
+	int br[_IOC_NR(BR_FAILED_REPLY) + 1];
 	int bc[_IOC_NR(BC_DEAD_BINDER_DONE) + 1];
 	int obj_created[BINDER_STAT_COUNT];
 	int obj_deleted[BINDER_STAT_COUNT];
@@ -1542,7 +1542,7 @@ static void binder_transaction(struct binder_proc *proc,
 	t->buffer = binder_alloc_buf(target_proc, tr->data_size,
 		tr->offsets_size, !reply && (t->flags & TF_ONE_WAY));
 	if (t->buffer == NULL) {
-		return_error = BR_FAILED_ALLOC;
+		return_error = BR_FAILED_REPLY;
 		printk(KERN_INFO "binder: t->buffer binder_alloc_buf fail\n");
 		goto err_binder_alloc_buf_failed;
 	}
@@ -3316,8 +3316,7 @@ static const char *binder_return_strings[] = {
 	"BR_FINISHED",
 	"BR_DEAD_BINDER",
 	"BR_CLEAR_DEATH_NOTIFICATION_DONE",
-	"BR_FAILED_REPLY",
-	"BR_FAILED_ALLOC"
+	"BR_FAILED_REPLY"
 };
 
 static const char *binder_command_strings[] = {

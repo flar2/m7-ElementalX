@@ -209,6 +209,62 @@ config ARCH_APQ8064
 	select MSM_KRAIT_WFE_FIXUP
 	select MSM_CPU_PWRCTL
 
+config ARCH_APQ8064_M7
+	bool "APQ8064_M7"
+	select ARCH_MSM_KRAITMP
+	select GPIO_MSM_V2
+	select ARM_GIC
+	select CPU_V7
+	select MSM_SCM if SMP
+	select MSM_GPIOMUX
+	select MSM_REMOTE_SPINLOCK_SFPB
+	select MSM_PIL
+	select MSM_QDSP6_APR
+	select MSM_QDSP6_CODECS
+	select MSM_AUDIO_QDSP6 if SND_SOC
+	select MULTI_IRQ_HANDLER
+	select MSM_RPM
+	select MSM_SPM_V2
+	select MSM_L2_SPM
+	select MSM_PM8X60 if PM
+	select CPU_HAS_L2_PMU
+	select HOLES_IN_ZONE if SPARSEMEM
+	select CLEANCACHE
+	select QCACHE
+	select MIGHT_HAVE_PCI
+	select ARCH_SUPPORTS_MSI
+	select ARM_HAS_SG_CHAIN
+	select MSM_KRAIT_WFE_FIXUP
+	select MSM_CPU_PWRCTL
+
+config ARCH_APQ8064_M7_DXG
+	bool "APQ8064_M7_DXG"
+	select ARCH_MSM_KRAITMP
+	select GPIO_MSM_V2
+	select ARM_GIC
+	select CPU_V7
+	select MSM_SCM if SMP
+	select MSM_GPIOMUX
+	select MSM_REMOTE_SPINLOCK_SFPB
+	select MSM_PIL
+	select MSM_QDSP6_APR
+	select MSM_QDSP6_CODECS
+	select MSM_AUDIO_QDSP6 if SND_SOC
+	select MULTI_IRQ_HANDLER
+	select MSM_RPM
+	select MSM_SPM_V2
+	select MSM_L2_SPM
+	select MSM_PM8X60 if PM
+	select CPU_HAS_L2_PMU
+	select HOLES_IN_ZONE if SPARSEMEM
+	select CLEANCACHE
+	select QCACHE
+	select MIGHT_HAVE_PCI
+	select ARCH_SUPPORTS_MSI
+	select ARM_HAS_SG_CHAIN
+	select MSM_KRAIT_WFE_FIXUP
+	select MSM_IOMMU_GPU_SYNC
+
 config ARCH_MSM8974
 	bool "MSM8974"
 	select ARCH_MSM_KRAITMP
@@ -2355,6 +2411,13 @@ config APQ8064_ONLY
 		help
 		 Help to separate APQ8064 code from other ARCH
 
+config ARCH_APQ8064_M7
+		depends on ARCH_APQ8064
+		default n
+		bool "ARCH APQ8064 M7 only"
+		help
+		 Help to separate APQ8064 M7 code from other APQ8064 projects
+
 config MSM8960_ONLY
 		default n
 		bool "ARCH MSM8960 only"
@@ -2649,6 +2712,12 @@ config MACH_M7_UL
         bool "APQ8064 M7_UL"
         help
           Support for the HTC APQ8064 M7_UL.
+
+config MACH_M7_DXG
+        depends on ARCH_APQ8064
+        bool "APQ8064 M7_DXG"
+        help
+          Support for the HTC APQ8064 M7_DXG.
 
 config QSC_MODEM
         default n

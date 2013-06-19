@@ -1033,7 +1033,7 @@ ilp0100_error Ilp0100_core_uploadFirmware( Ilp0100_structInitFirmware InitFirmwa
 	if(InitFirmware.Ilp0100SensorRawPart2PartCalibDataSize!=0) {
 		Part2PartCalibdataPresent=TRUE;
 		FileHdr[2].magic_id= 0;
-		FileHdr[2].load_add= 0xC00;
+		FileHdr[2].load_add= 0x7C00;
 		FileHdr[2].code_size= InitFirmware.Ilp0100SensorRawPart2PartCalibDataSize- sizeof(FileHdr[2].crc);
 		FileHdr[2].crc= *(uint16_t*)InitFirmware.pIlp0100SensorRawPart2PartCalibData;
 		FileHdr[2].file_offset= 0x0002;

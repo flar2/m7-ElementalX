@@ -1279,6 +1279,7 @@ typedef struct{
 	uint8_t AF_INF_LSB;
 	uint8_t AF_MACRO_MSB;
 	uint8_t AF_MACRO_LSB;
+	uint8_t ACT_ID;
 }af_value_t;
 
 struct sensor_cfg_data {
@@ -1528,6 +1529,7 @@ struct msm_actuator_af_OTP_info_t {
 	uint16_t VCM_Start;
 	uint16_t VCM_Infinity;
 	uint16_t VCM_Macro;
+	uint8_t act_id;
 };
 
 enum af_camera_name {
