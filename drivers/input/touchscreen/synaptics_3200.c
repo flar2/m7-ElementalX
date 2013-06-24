@@ -2095,22 +2095,31 @@ static int report_htc_logo_area(int x, int y) {
 
 static void dt2w_func(int x, int y, cputime64_t trigger_time) {
 
+	int delta_x = 0;
+	int delta_y = 0;
+
         dt2w_time[1] = dt2w_time[0];
         dt2w_time[0] = trigger_time;
 
 	dt2w_x[1] = dt2w_x[0];
         dt2w_x[0] = x;
-
-        dt2w_y[1] = dt2w_y[0];
+	dt2w_y[1] = dt2w_y[0];
         dt2w_y[0] = y;
+
+	delta_x = (dt2w_x[0]-dt2w_x[1]);
+	delta_y = (dt2w_y[0]-dt2w_y[1]);
 
 //	printk(KERN_INFO "x=%d y=%d\n", dt2w_x[0], dt2w_y[0]);
 
         if (scr_suspended) {
-		if (y < 2880 && y > 2000 && ((dt2w_time[0]-dt2w_time[1]) > DT2W_TIMEOUT_MIN)
-					 && ((dt2w_time[0]-dt2w_time[1]) < DT2W_TIMEOUT_MAX)
-					 && ((dt2w_x[0]-dt2w_x[1]) < DT2W_DELTA || (dt2w_x[1]-dt2w_x[0]) < DT2W_DELTA)
-					 && ((dt2w_y[0]-dt2w_y[1]) < DT2W_DELTA || (dt2w_x[1]-dt2w_x[0]) < DT2W_DELTA)) {
+		if (
+		y < 2880
+		&& y > 2000
+		&& ((dt2w_time[0]-dt2w_time[1]) > DT2W_TIMEOUT_MIN)
+		&& ((dt2w_time[0]-dt2w_time[1]) < DT2W_TIMEOUT_MAX)
+		&& (abs(delta_x) < DT2W_DELTA)
+		&& (abs(delta_y) < DT2W_DELTA)
+		) {
                        // printk("[DT2W]: OFF->ON\n");
 			wakesleep_vib = 1;
                         sweep2wake_pwrtrigger();
