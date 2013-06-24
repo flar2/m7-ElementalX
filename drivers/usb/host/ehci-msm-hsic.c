@@ -729,7 +729,7 @@ static void register_usb_notification_func(struct work_struct *work)
 #define ULPI_IO_TIMEOUT_USEC	(10 * 1000)
 
 #define USB_PHY_VDD_DIG_VOL_NONE	0 
-#define USB_PHY_VDD_DIG_VOL_MIN		1000000 
+#define USB_PHY_VDD_DIG_VOL_MIN		945000 
 #define USB_PHY_VDD_DIG_VOL_MAX		1320000 
 
 #define HSIC_DBG1_REG		0x38
@@ -1047,12 +1047,6 @@ static int msm_hsic_suspend(struct msm_hsic_hcd *mehci)
 		return 0;
 	}
 
-	if (!(readl_relaxed(USB_PORTSC) & PORT_PE)) {
-		dev_err(mehci->dev, "%s:port is not enabled skip suspend\n",
-				__func__);
-		return -EAGAIN;
-	}
-
 	disable_irq(hcd->irq);
 
 	
@@ -1363,6 +1357,15 @@ static int ehci_hsic_urb_enqueue(struct usb_hcd *hcd, struct urb *urb,
 
 static int ehci_hsic_bus_suspend(struct usb_hcd *hcd)
 {
+	struct msm_hsic_hcd *mehci = hcd_to_hsic(hcd);
+
+	if (!(readl_relaxed(USB_PORTSC) & PORT_PE)) {
+		dbg_log_event(NULL, "RH suspend attempt failed", 0);
+		dev_dbg(mehci->dev, "%s:port is not enabled skip suspend\n",
+				__func__);
+		return -EAGAIN;
+	}
+
 	dbg_log_event(NULL, "Suspend RH", 0);
 	pr_info("%s: Suspend RH\n", __func__);
 	return ehci_bus_suspend(hcd);
